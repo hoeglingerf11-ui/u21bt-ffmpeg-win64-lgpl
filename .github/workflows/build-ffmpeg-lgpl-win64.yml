@@ -48,11 +48,11 @@ jobs:
 
       - name: Build with pinned cross-toolchain image
         shell: bash
-        run: ci/build_ffmpeg.sh
+        run: bash ./ci/build_ffmpeg.sh
 
       - name: Prepare matching source and build bundle
         shell: bash
-        run: ci/package_sources.sh
+        run: bash ./ci/package_sources.sh
 
       - name: Enforce free artifact storage ceiling
         shell: bash
