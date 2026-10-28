@@ -1,0 +1,116 @@
+name: U21BT LGPL FFmpeg win64 (manual only)
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: u21bt-ffmpeg-win64-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 360
+    steps:
+      - name: Require a public repository and enough runner disk
+        shell: bash
+        run: |
+          set -euo pipefail
+          visibility="$(curl -fsSL "https://api.github.com/repos/${GITHUB_REPOSITORY}" | jq -r '.visibility // (if .private then "private" else "public" end)')"
+          test "$visibility" = public || { echo "Refusing build: repository is not public." >&2; exit 1; }
+          free_kb="$(df -Pk "$GITHUB_WORKSPACE" | awk 'NR==2 {print $4}')"
+          test "$free_kb" -ge 8388608 || { echo "Refusing build: less than 8 GiB free on runner." >&2; exit 1; }
+          echo "Public repository and standard ubuntu-24.04 runner confirmed; free disk ${free_kb} KiB."
+
+      - name: Checkout build harness
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+
+      - name: Checkout pinned FFmpeg source
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          repository: FFmpeg/FFmpeg
+          ref: 46d899d7a02bc63237472cc4897258d5ddf274ac
+          path: upstream/ffmpeg
+          persist-credentials: false
+
+      - name: Checkout pinned BtbN build recipe
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          repository: BtbN/FFmpeg-Builds
+          ref: 63ac3265b0789ea16c7b1f8351cd2ad195a28722
+          path: upstream/btbn
+          persist-credentials: false
+
+      - name: Build with pinned cross-toolchain image
+        shell: bash
+        run: ci/build_ffmpeg.sh
+
+      - name: Prepare matching source and build bundle
+        shell: bash
+        run: ci/package_sources.sh
+
+      - name: Enforce free artifact storage ceiling
+        shell: bash
+        run: |
+          set -euo pipefail
+          bytes=0
+          for file in out/artifacts/ffmpeg-win64-lgpl-shared-u21bt.zip out/artifacts/ffmpeg-win64-lgpl-source-build-u21bt.zip out/artifacts/build-manifest.json out/artifacts/SHA256SUMS.txt; do
+            bytes=$((bytes + $(stat -c%s "$file")))
+          done
+          test "$bytes" -le 262144000 || { echo "Artifacts exceed the 250 MiB ceiling." >&2; exit 1; }
+          echo "artifact_bytes=$bytes (limit 262144000)"
+
+      - name: Upload runtime, source package, and build evidence
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: u21bt-ffmpeg-win64-lgpl-shared
+          path: |
+            out/artifacts/ffmpeg-win64-lgpl-shared-u21bt.zip
+            out/artifacts/ffmpeg-win64-lgpl-source-build-u21bt.zip
+            out/artifacts/build-manifest.json
+            out/artifacts/SHA256SUMS.txt
+          if-no-files-found: error
+          retention-days: 3
+          compression-level: 0
+
+  windows-smoke:
+    needs: build
+    runs-on: windows-2022
+    timeout-minutes: 30
+    steps:
+      - name: Checkout build harness
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+
+      - name: Download build artifacts
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
+        with:
+          name: u21bt-ffmpeg-win64-lgpl-shared
+          path: out/artifacts
+
+      - name: Verify package and exercise U21BE codecs and filters
+        shell: pwsh
+        run: ./ci/verify_ffmpeg.ps1 -ArtifactRoot ./out/artifacts
+
+      - name: Hash Windows smoke report
+        shell: pwsh
+        run: |
+          $hash = (Get-FileHash -LiteralPath ./windows-smoke-report.json -Algorithm SHA256).Hash.ToLowerInvariant()
+          "$hash  windows-smoke-report.json" | Set-Content -LiteralPath ./windows-smoke-report.json.sha256 -Encoding ascii
+
+      - name: Upload Windows smoke report
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: u21bt-ffmpeg-windows-smoke-report
+          path: |
+            windows-smoke-report.json
+            windows-smoke-report.json.sha256
+          if-no-files-found: error
+          retention-days: 3
+          compression-level: 0
