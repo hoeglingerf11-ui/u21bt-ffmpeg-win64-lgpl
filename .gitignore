@@ -1,0 +1,4 @@
+out/
+upstream/
+windows-smoke-report.json
+windows-smoke-report.json.sha256
