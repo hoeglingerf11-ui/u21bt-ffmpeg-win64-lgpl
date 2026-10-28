@@ -6,6 +6,9 @@ BTBN_COMMIT='63ac3265b0789ea16c7b1f8351cd2ad195a28722'
 BTBN='/work/upstream/btbn'
 OUT='/work/out'
 
+git config --global --add safe.directory /work/upstream/ffmpeg
+git config --global --add safe.directory /work/upstream/btbn
+
 test "$(git rev-parse HEAD)" = "$FFMPEG_COMMIT"
 test "$(git -C "$BTBN" rev-parse HEAD)" = "$BTBN_COMMIT"
 test -f "$BTBN/variants/win64-lgpl-shared.sh"
