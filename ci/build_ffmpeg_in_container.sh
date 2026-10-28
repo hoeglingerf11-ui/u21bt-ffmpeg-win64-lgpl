@@ -54,7 +54,7 @@ done
 ./configure --prefix="$OUT/prefix" "${CONFIG_ARGS[@]}" \
   --cc="$CC" --cxx="$CXX" --ar="$AR" --ranlib="$RANLIB" --nm="$NM" \
   --extra-cflags="$FF_CFLAGS" --extra-cxxflags="$FF_CXXFLAGS" \
-  --extra-ldflags="$FF_LDFLAGS" --extra-libs="$FF_LIBS" \
+  --extra-ldflags="$FF_LDFLAGS" --extra-libs="${FF_LIBS:-}" \
   --extra-version=u21bt 2>&1 | tee "$OUT/configure.log"
 cp ffbuild/config.log "$OUT/config.log"
 
