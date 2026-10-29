@@ -39,7 +39,7 @@ rm -rf "$OUT/prefix" "$OUT/runtime"
 mkdir -p "$OUT/prefix" "$OUT/runtime/bin"
 read -r -a TARGET_ARGS <<< "$FFBUILD_TARGET_FLAGS"
 read -r -a BASE_CONFIG_ARGS <<< "$FF_CONFIGURE"
-CONFIG_ARGS=("${TARGET_ARGS[@]}" "${BASE_CONFIG_ARGS[@]}" --disable-autodetect --enable-mediafoundation)
+CONFIG_ARGS=("${TARGET_ARGS[@]}" "${BASE_CONFIG_ARGS[@]}" --disable-autodetect --enable-mediafoundation --enable-d3d11va)
 for arg in "${CONFIG_ARGS[@]}"; do
   case "$arg" in
     --enable-gpl|--enable-nonfree|--enable-libx264) echo "Forbidden configure option: $arg" >&2; exit 20 ;;
@@ -59,6 +59,7 @@ done
 cp ffbuild/config.log "$OUT/config.log"
 
 grep -Eq '^CONFIG_MEDIAFOUNDATION=yes$' ffbuild/config.mak
+grep -Eq '^CONFIG_D3D11VA=yes$' ffbuild/config.mak
 grep -Eq '^CONFIG_H264_MF_ENCODER=yes$' ffbuild/config.mak
 grep -Eq '^CONFIG_FFV1_ENCODER=yes$' ffbuild/config.mak
 grep -Eq '^CONFIG_AAC_ENCODER=yes$' ffbuild/config.mak

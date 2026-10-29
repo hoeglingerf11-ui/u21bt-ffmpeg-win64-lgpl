@@ -21,7 +21,7 @@
   },
   "configuration": {
     "variant_flags": ["--enable-version3", "--disable-debug", "--enable-shared", "--disable-static"],
-    "additional_flags": ["--disable-autodetect", "--enable-mediafoundation"],
+    "additional_flags": ["--disable-autodetect", "--enable-mediafoundation", "--enable-d3d11va"],
     "forbidden_flags": ["--enable-gpl", "--enable-nonfree", "--enable-libx264"],
     "optional_external_ffmpeg_libraries": [],
     "encoders": ["ffv1", "h264_mf", "aac"],
