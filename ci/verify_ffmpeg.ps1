@@ -46,7 +46,7 @@ if ($LASTEXITCODE -ne 0 -or !(Test-Path -LiteralPath $scene)) { throw 'FFV1 inte
 & $ffmpeg -hide_banner -v error -xerror -nostdin -i $scene -f null NUL
 if ($LASTEXITCODE -ne 0) { throw 'FFV1 intermediate decode failed.' }
 
-$graph = '[0:v][1:v]xfade=transition=fade:duration=0.25:offset=0.75,format=yuv420p[v];[2:a]anull[a]'
+$graph = '[0:v]settb=AVTB,setpts=PTS-STARTPTS[v0];[1:v]settb=AVTB,setpts=PTS-STARTPTS[v1];[v0][v1]xfade=transition=fade:duration=0.25:offset=0.75,format=yuv420p[v];[2:a]anull[a]'
 & $ffmpeg -hide_banner -v error -xerror -nostdin -i $scene -f lavfi -i 'testsrc=size=320x180:rate=25:duration=1' -i $scene -filter_complex $graph -map '[v]' -map '[a]' -frames:v 44 -t 1.76 -c:v h264_mf -hw_encoding 0 -rate_control quality -quality 100 -scenario archive -b:v 2M -g 50 -bf 0 -c:a aac -b:a 128k -ar 48000 -movflags +faststart -y $movie
 if ($LASTEXITCODE -ne 0 -or !(Test-Path -LiteralPath $movie)) { throw 'Media Foundation H.264/AAC MP4 encode failed.' }
 & $ffmpeg -hide_banner -v error -xerror -nostdin -i $movie -f null NUL
