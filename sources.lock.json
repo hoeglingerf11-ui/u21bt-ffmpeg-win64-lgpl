@@ -25,7 +25,8 @@
     "forbidden_flags": ["--enable-gpl", "--enable-nonfree", "--enable-libx264"],
     "optional_external_ffmpeg_libraries": [],
     "encoders": ["ffv1", "h264_mf", "aac"],
-    "filters": ["fps", "split", "scale", "crop", "boxblur", "overlay", "zoompan", "setsar", "format", "trim", "settb", "setpts", "concat", "xfade", "atrim", "asetpts", "adelay", "afade", "volume", "amix", "apad", "sidechaincompress", "alimiter", "aresample", "anull", "asplit"]
+    "filters": ["fps", "split", "scale", "crop", "overlay", "zoompan", "setsar", "format", "trim", "settb", "setpts", "concat", "xfade", "atrim", "asetpts", "adelay", "afade", "volume", "amix", "apad", "sidechaincompress", "alimiter", "aresample", "anull", "asplit"],
+    "excluded_filters": {"boxblur": "Excluded because the pinned FFmpeg configure marks boxblur_filter_deps='gpl'; enabling it would violate this LGPL-only build target."}
   },
   "github_actions": {"actions_checkout":"11bd71901bbe5b1630ceea73d27597364c9af683", "actions_upload_artifact":"ea165f8d65b6e75b540449e92b4886f43607fa02", "actions_download_artifact":"d3f86a106a0bac45b974a628896c90dbdf5c8093"},
   "cost_controls": {"trigger":"workflow_dispatch only", "public_repository_required":true, "runners":["ubuntu-24.04","windows-2022"], "larger_runners":false, "third_party_build_services":false, "automatic_retries":false, "artifact_limit_bytes":262144000, "artifact_retention_days":3, "manual_preflight_required":"Confirm public repo, standard runners, zero-cost account status, and remaining shared Actions/Packages artifact quota immediately before a separately authorized run."},

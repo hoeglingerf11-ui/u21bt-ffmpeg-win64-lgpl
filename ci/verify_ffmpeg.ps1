@@ -36,7 +36,7 @@ if ($LASTEXITCODE -ne 0) { throw 'ffmpeg -encoders failed.' }
 foreach ($encoder in @('ffv1','h264_mf','aac')) { if ($encoders -notmatch "\b$([regex]::Escape($encoder))\b") { throw "Required encoder missing: $encoder" } }
 $filters = (& $ffmpeg -hide_banner -filters 2>&1 | Out-String)
 if ($LASTEXITCODE -ne 0) { throw 'ffmpeg -filters failed.' }
-$requiredFilters = @('fps','split','scale','crop','boxblur','overlay','zoompan','setsar','format','trim','settb','setpts','concat','xfade','atrim','asetpts','adelay','afade','volume','amix','apad','sidechaincompress','alimiter','aresample','anull','asplit')
+$requiredFilters = @('fps','split','scale','crop','overlay','zoompan','setsar','format','trim','settb','setpts','concat','xfade','atrim','asetpts','adelay','afade','volume','amix','apad','sidechaincompress','alimiter','aresample','anull','asplit')
 foreach ($filter in $requiredFilters) { if ($filters -notmatch "\b$([regex]::Escape($filter))\b") { throw "Required filter missing: $filter" } }
 
 $scene = Join-Path $root 'scene-test.mkv'
