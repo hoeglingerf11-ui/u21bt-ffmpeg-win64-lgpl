@@ -17,9 +17,16 @@ jobs:
     steps:
       - name: Require a public repository and enough runner disk
         shell: bash
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
         run: |
           set -euo pipefail
-          visibility="$(curl -fsSL "https://api.github.com/repos/${GITHUB_REPOSITORY}" | jq -r '.visibility // (if .private then "private" else "public" end)')"
+          visibility="$(curl -fsSL --config - "https://api.github.com/repos/${GITHUB_REPOSITORY}" <<CURL_CONFIG | jq -r '.visibility // (if .private then "private" else "public" end)'
+          header = "Accept: application/vnd.github+json"
+          header = "Authorization: Bearer ${GITHUB_TOKEN}"
+          header = "X-GitHub-Api-Version: 2022-11-28"
+          CURL_CONFIG
+          )"
           test "$visibility" = public || { echo "Refusing build: repository is not public." >&2; exit 1; }
           free_kb="$(df -Pk "$GITHUB_WORKSPACE" | awk 'NR==2 {print $4}')"
           test "$free_kb" -ge 8388608 || { echo "Refusing build: less than 8 GiB free on runner." >&2; exit 1; }
