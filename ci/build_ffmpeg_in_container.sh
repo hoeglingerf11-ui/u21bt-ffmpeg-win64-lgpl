@@ -16,7 +16,7 @@ test -f COPYING.LGPLv3
 
 {
   echo '=== Pinned builder image ==='
-  echo 'ghcr.io/btbn/ffmpeg-builds/base-win64@sha256:284c22c72ffe8f2ff2f6676a60482a9ca0ee7e093c9938a801bc1a4d83b0e9c1'
+  echo 'ghcr.io/btbn/ffmpeg-builds/base-win64@sha256:bb591a4a0357ff73c85fb0ef346ed135e11aff6d2c18dc17364b3a65ff540699'
   echo '=== Host compiler ==='
   "${HOST_CC:-cc}" --version | head -n 1
   echo '=== Cross compiler ==='

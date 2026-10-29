@@ -10,12 +10,12 @@
     "license": "MIT"
   },
   "builder_image": {
-    "reference": "ghcr.io/btbn/ffmpeg-builds/base-win64@sha256:284c22c72ffe8f2ff2f6676a60482a9ca0ee7e093c9938a801bc1a4d83b0e9c1",
-    "manifest_digest": "sha256:284c22c72ffe8f2ff2f6676a60482a9ca0ee7e093c9938a801bc1a4d83b0e9c1",
-    "config_digest": "sha256:e365af5eadd330335bfd7351a780105e561d1b253c2678c2eaf67cc6fba02808",
+    "reference": "ghcr.io/btbn/ffmpeg-builds/base-win64@sha256:bb591a4a0357ff73c85fb0ef346ed135e11aff6d2c18dc17364b3a65ff540699",
+    "manifest_digest": "sha256:bb591a4a0357ff73c85fb0ef346ed135e11aff6d2c18dc17364b3a65ff540699",
+    "config_digest": "sha256:ef8789be950f1a92ff08bda05a34c834a38a3e85df8967944b9ae58ad9d74db7",
     "observed_architecture": "linux/amd64",
     "observed_base_os": "Ubuntu 26.04",
-    "observed_created_utc": "2026-10-27T13:32:05Z",
+    "observed_created_utc": "2026-10-28T22:40:09.138567001Z",
     "expected_toolchain_from_pinned_btbn_config": {"crosstool_ng":"1.29.0.7_b1a94f6", "binutils":"2.47", "gcc":"16.2.0", "mingw_w64":"v14.0.0", "target":"x86_64-w64-mingw32 / UCRT"},
     "actual_tool_versions_must_be_logged": true
   },

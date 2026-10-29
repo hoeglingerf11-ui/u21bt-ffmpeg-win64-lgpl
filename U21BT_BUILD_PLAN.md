@@ -8,7 +8,7 @@ Dieser öffentliche Arbeitsstand enthält ausschließlich generische Builddateie
 
 - FFmpeg-Quellcommit: 46d899d7a02bc63237472cc4897258d5ddf274ac.
 - BtbN-Rezeptcommit: 63ac3265b0789ea16c7b1f8351cd2ad195a28722, Variante win64-lgpl-shared.
-- OCI-Image: ghcr.io/btbn/ffmpeg-builds/base-win64@sha256:284c22c72ffe8f2ff2f6676a60482a9ca0ee7e093c9938a801bc1a4d83b0e9c1.
+- OCI-Image: ghcr.io/btbn/ffmpeg-builds/base-win64@sha256:bb591a4a0357ff73c85fb0ef346ed135e11aff6d2c18dc17364b3a65ff540699 (der vorherige Manifest-Digest wurde vom öffentlichen GHCR-Paket entfernt; dieser verfügbare Digest wurde am 2026-10-29 direkt gegen GHCR geprüft).
 - BtbN-Rezept nennt crosstool-ng 1.29.0.7, binutils 2.47, GCC 16.2.0 und MinGW-w64 v14.0.0; der Workflow protokolliert Laufzeitversionen.
 - Öffentliche Quellstände: [FFmpeg](https://github.com/FFmpeg/FFmpeg/tree/46d899d7a02bc63237472cc4897258d5ddf274ac) und [BtbN](https://github.com/BtbN/FFmpeg-Builds/tree/63ac3265b0789ea16c7b1f8351cd2ad195a28722).
 
